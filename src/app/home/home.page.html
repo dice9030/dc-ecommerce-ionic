@@ -14,22 +14,28 @@
   </ion-toolbar>
 </ion-header>
 <ion-content >  
-   <ion-row>
-        <ion-col sizeLg="6" sizeMd="6" sizeXs="12" *ngFor="let product of searchedProducts">          
-            <ion-card >
-              <img src="{{product.image}}" />
-              <div >
-                <ion-row>
-                  <ion-col sizeLg="9" sizeMd="9" sizeXs="9">
-                      <div class="card-title">  {{product.title}} </div>
-                  </ion-col>
-                   <ion-col sizeLg="3" sizeMd="3" sizeXs="3" class="icon-col">
-                    <ion-icon name="eye-outline" [routerLink]="['/product',product.id]"></ion-icon>
-                    <ion-icon name="add-outline" (click)="create(product.title,product.price,product.image)" ></ion-icon>
-                  </ion-col>
-                </ion-row>                               
-              </div>
-            </ion-card>
-        </ion-col>
-    </ion-row>
+  <ion-row class="product-grid">
+  <ion-col size="12" size-md="6" size-lg="4" *ngFor="let product of searchedProducts">
+    <ion-card class="product-card animate-card"  >
+      <div class="image-container"  [routerLink]="['/product',product.id]">
+        <img [src]="product.image" alt="{{product.title}}" />
+      </div>
+
+      <ion-card-header>
+        <ion-card-title class="truncate">{{ product.title }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="card-actions">
+        <ion-button fill="clear" size="small" color="success" (click)="create(product.title, product.price, product.image); $event.stopPropagation()">
+          <ion-icon name="add-outline" slot="icon-only"></ion-icon>         
+        </ion-button>
+          <span class="price">${{ product.price }}</span>
+        <ion-button fill="clear" size="small" color="success"  [routerLink]="['/product',product.id]">
+          <ion-icon name="eye-outline"></ion-icon>        
+        </ion-button>
+      
+      </ion-card-content>
+    </ion-card>
+  </ion-col>
+</ion-row>  
 </ion-content>
