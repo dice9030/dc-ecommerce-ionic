@@ -12,8 +12,9 @@ import { ToastController } from '@ionic/angular';
 })
 export class HomePage {
 
-  public order: string;
-  public orders: string[];
+  public cartCount: number = 0;
+  // public order: string;
+  public orders: [];
   public products: any = [];
   public searchedProducts: any;
 
@@ -22,8 +23,7 @@ export class HomePage {
       private router: Router,
       private http: HttpClient,
       public toastController: ToastController,
-  ) {
-    this.order = '';
+  ) {   
     this.orders = [];
   }
 
@@ -73,9 +73,8 @@ export class HomePage {
    const today = new Date();
    const date = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
     this.sqlite.create(name,date,price,url).then( (changes) =>{
-      this.presentToast("Se agrego correctamente");
-      this.order = '';
-      this.read(); // Volvemos a leer
+      this.presentToast("Se agrego correctamente");      
+      this.read(); 
     }).catch(err => {
       console.error(err);
       console.error("Error al crear");
@@ -84,7 +83,8 @@ export class HomePage {
 
   read(){
     this.sqlite.read().then( (orders: string[]) => {
-      this.orders = orders;
+      // this.orders = orders;
+      this.cartCount = orders.length;
 
     }).catch(err => {
       console.error(err);
@@ -92,14 +92,14 @@ export class HomePage {
     })
   }
   
-  update(order: string){
-    this.sqlite.update(this.order.toUpperCase(), order).then( (changes) => {
-      this.order = '';
-      this.read(); 
-    }).catch(err => {
-      console.error(err);
-      console.error("Error al actualizar");
-    })
-  }
+  // update(order: string){
+  //   this.sqlite.update('', order).then( (changes) => {
+  //     // this.order = '';
+  //     this.read(); 
+  //   }).catch(err => {
+  //     console.error(err);
+  //     console.error("Error al actualizar");
+  //   })
+  // }
 
 }

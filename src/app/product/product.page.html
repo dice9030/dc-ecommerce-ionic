@@ -31,8 +31,10 @@
       </ion-chip>
     </ion-card-content>
 
-    <ion-button expand="block" class="btn-custom-color">
-      Comprar
+     
+
+    <ion-button expand="block" class="btn-custom-color"  (click)="create(detailProduct.title, detailProduct.price, detailProduct.image); $event.stopPropagation()">
+     <ion-icon name="add-outline" slot="icon-only"></ion-icon>   Agregar al carrito
     </ion-button>
   
   <ion-label *ngIf="!lodaing">Cargando... </ion-label>
