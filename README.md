@@ -1,7 +1,6 @@
-Estructura del Proyecto
------------------------
+## Estructura del Proyecto
 
-```
+```plaintext
 .
 ├── .browserslistrc
 ├── .editorconfig
@@ -46,6 +45,7 @@ Estructura del Proyecto
 ├── .angular/
 │   └── cache/
 │       └── 16.2.7/
+```
 
 ## Cómo levantar el proyecto
 
@@ -54,7 +54,6 @@ Estructura del Proyecto
    git clone <URL-del-repositorio>
    cd dc-ecommerce-ionic
    ```
-
 2. **Instala las dependencias:**
    ```sh
    npm install
