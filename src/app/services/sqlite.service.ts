@@ -122,34 +122,29 @@ export class SqliteService {
     return this.dbName;
   }
 
-  async create(language: string) {
-    // Sentencia para insertar un registro
-    let sql = 'INSERT INTO languages VALUES(?)';
-    // Obtengo la base de datos
-    const dbName = await this.getDbName();
-    // Ejecutamos la sentencia
-    return CapacitorSQLite.executeSet({
-      database: dbName,
-      set: [
-        {
-          statement: sql,
-          values: [
-            language
-          ]
-        }
-      ]
-    }).then((changes: capSQLiteChanges) => {
-      // Si es web, debemos guardar el cambio en la webstore manualmente
-      if (this.isWeb) {
-        CapacitorSQLite.saveToStore({ database: dbName });
+async create(name: string, orderDate: string, price: number, url: string) {
+  const sql = 'INSERT INTO orderCab (name, date, price,url) VALUES (?, ?, ?,?)';
+  const dbName = await this.getDbName();
+
+  return CapacitorSQLite.executeSet({
+    database: dbName,
+    set: [
+      {
+        statement: sql,
+        values: [name, orderDate, price ,url ]
       }
-      return changes;
-    }).catch(err => Promise.reject(err))
-  }
+    ]
+  }).then((changes: capSQLiteChanges) => {
+    if (this.isWeb) {
+      CapacitorSQLite.saveToStore({ database: dbName });
+    }
+    return changes;
+  }).catch(err => Promise.reject(err));
+}
 
   async read() {
     // Sentencia para leer todos los registros
-    let sql = 'SELECT * FROM languages';
+    let sql = 'SELECT * FROM orderCab';
     // Obtengo la base de datos
     const dbName = await this.getDbName();
     // Ejecutamos la sentencia
@@ -158,7 +153,7 @@ export class SqliteService {
       statement: sql,
       values: [] // necesario para android
     }).then((response: capSQLiteValues) => {
-      let languages: string[] = [];
+      let orders: string[] = [];
 
       // Si es IOS y hay datos, elimino la primera fila
       // Esto se debe a que la primera fila es informacion de las tablas
@@ -168,17 +163,17 @@ export class SqliteService {
 
       // recorremos los datos
       for (let index = 0; index < response.values.length; index++) {
-        const language = response.values[index];
-        languages.push(language.name);
+        const order = response.values[index];
+        orders.push(order);
       }
-      return languages;
+      return orders;
 
     }).catch(err => Promise.reject(err))
   }
 
   async update(newLanguage: string, originalLanguage: string) {
     // Sentencia para actualizar un registro
-    let sql = 'UPDATE languages SET name=? WHERE name=?';
+    let sql = 'UPDATE orderCab SET id=? WHERE date=?';
     // Obtengo la base de datos
     const dbName = await this.getDbName();
     // Ejecutamos la sentencia
@@ -202,9 +197,9 @@ export class SqliteService {
     }).catch(err => Promise.reject(err))
   }
 
-  async delete(language: string) {
+  async delete(id: number) {
     // Sentencia para eliminar un registro
-    let sql = 'DELETE FROM languages WHERE name=?';
+    let sql = 'DELETE FROM orderCab WHERE id=?';
     // Obtengo la base de datos
     const dbName = await this.getDbName();
     // Ejecutamos la sentencia
@@ -214,7 +209,7 @@ export class SqliteService {
         {
           statement: sql,
           values: [
-            language
+            id
           ]
         }
       ]

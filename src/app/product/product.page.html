@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="newPrimary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding"  *ngIf="lodaing">
+
+  <div id="container">
+    <button ion-button (click)="goToHome()" class="btn" >
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </button >
+  </div>
+  <img src="{{detailProduct.image}}" alt="Producto">
+
+    <ion-card-header>
+      <ion-card-title>{{detailProduct.title}}</ion-card-title>
+      <ion-card-subtitle>{{detailProduct.category}}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p class="price">$ {{detailProduct.price}}</p>
+      <p>
+        {{detailProduct.description}}
+      </p>
+      <ion-chip color="warning" outline>
+        ⭐  {{detailProduct.rating.rate}} /5 ( {{detailProduct.rating.count}} reviews)
+      </ion-chip>
+    </ion-card-content>
+
+    <ion-button expand="block" class="btn-custom-color">
+      Comprar
+    </ion-button>
+  
+  <ion-label *ngIf="!lodaing">Cargando... </ion-label>
+</ion-content>

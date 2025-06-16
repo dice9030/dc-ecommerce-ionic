@@ -1,15 +1,31 @@
 {
-    "database": "languages.db",
+    "database": "ecommerce.db",
     "version": 1,
     "encrypted": false,
     "mode": "full",
     "tables": [
         {
-            "name": "languages",
-            "schema": [
+            "name": "orderCab",
+              "schema": [
                 {
-                    "column": "name",
-                    "value": "TEXT NOT NULL PRIMARY KEY"
+                "column": "id",
+                "value": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
+                },
+                {
+                "column": "name",
+                "value": "TEXT NOT NULL"
+                },
+                {
+                "column": "date",
+                "value": "TEXT NOT NULL"
+                },
+                {
+                "column": "price",
+                "value": "REAL NOT NULL"
+                },
+                {
+                "column": "url",
+                "value": "TEXT NOT NULL"
                 }
             ]
         }

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { SqliteService } from '../services/sqlite.service';
+import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -8,27 +12,69 @@ import { SqliteService } from '../services/sqlite.service';
 })
 export class HomePage {
 
-  public language: string;
-  public languages: string[];
+  public order: string;
+  public orders: string[];
+  public products: any = [];
+  public searchedProducts: any;
 
   constructor(
-    private sqlite: SqliteService
+      private sqlite: SqliteService,
+      private router: Router,
+      private http: HttpClient,
+      public toastController: ToastController,
   ) {
-    this.language = '';
-    this.languages = [];
+    this.order = '';
+    this.orders = [];
   }
 
-  // Al entrar, leemos la base de datos
+
   ionViewWillEnter(){
     this.read();
+     this.getProducts().subscribe(res => {
+      this.products = res;
+      this.searchedProducts = this.products;
+    });
   }
 
-  create(){
-    // Creamos un elemento en la base de datos
-    this.sqlite.create(this.language.toUpperCase()).then( (changes) =>{
-      console.log(changes);
-      console.log("Creado");
-      this.language = '';
+  goToOrders(){
+     this.router.navigate(['/orders'])
+  }
+
+
+  getProducts() {
+      return this.http.get('https://fakestoreapi.com/products').pipe(
+      map((res: any) => {
+        return res;
+      }))
+       
+  }
+
+  searchCustomer(event: any) {
+    const searchTerm = event.target.value;
+    this.searchedProducts = this.products;
+    if (searchTerm && searchTerm.trim() !== '') {
+      this.searchedProducts = this.searchedProducts.filter((product: any) => {
+        return product.title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 ;
+      });
+    } 
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1500,
+      position: 'bottom',
+    });
+    toast.present();
+  }
+
+  create(name:string, price:number, url:string){
+
+   const today = new Date();
+   const date = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
+    this.sqlite.create(name,date,price,url).then( (changes) =>{
+      this.presentToast("Se agrego correctamente");
+      this.order = '';
       this.read(); // Volvemos a leer
     }).catch(err => {
       console.error(err);
@@ -37,39 +83,22 @@ export class HomePage {
   }
 
   read(){
-    // Leemos los datos de la base de datos
-    this.sqlite.read().then( (languages: string[]) => {
-      this.languages = languages;
-      console.log("Leido");
-      console.log(this.languages);
+    this.sqlite.read().then( (orders: string[]) => {
+      this.orders = orders;
+
     }).catch(err => {
       console.error(err);
       console.error("Error al leer");
     })
   }
   
-  update(language: string){
-    // Actualizamos el elemento (language) por el nuevo elemento (this.language)
-    this.sqlite.update(this.language.toUpperCase(), language).then( (changes) => {
-      console.log(changes);
-      console.log("Actualizado");
-      this.language = '';
-      this.read(); // Volvemos a leer
+  update(order: string){
+    this.sqlite.update(this.order.toUpperCase(), order).then( (changes) => {
+      this.order = '';
+      this.read(); 
     }).catch(err => {
       console.error(err);
       console.error("Error al actualizar");
-    })
-  }
-
-  delete(language: string){
-    // Borramos el elemento
-    this.sqlite.delete(language).then( (changes) => {
-      console.log(changes);
-      console.log("Borrado");
-      this.read(); // Volvemos a leer
-    }).catch(err => {
-      console.error(err);
-      console.error("Error al borrar");
     })
   }
 

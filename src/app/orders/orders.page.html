@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="newPrimary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+     <div id="container">
+    <button ion-button (click)="goToHome()" class="btn" >
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </button >
+  </div>
+  <div class="cart-container">
+    <ion-list class="cart-list">
+      
+      <ion-item *ngFor="let order of orders">   
+         <!-- <pre>{{ order | json }}</pre>
+         <pre>{{ order.name }}</pre> -->
+        <ion-thumbnail slot="start">          
+          <img [src]="order.url" alt="Producto" />
+        </ion-thumbnail>         
+        <ion-label>
+          <h2>{{ order.name }}</h2>
+          <p>Precio: $ {{ order.price }}</p>        
+        </ion-label>
+
+        <ion-button fill="clear" color="danger" slot="end"  (click)="delete(order.id)"  >
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+    </ion-list>
+  </div>
+
+</ion-content>
+
+<!-- Botón fijo abajo -->
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>Total: ${{ totalAmount }}</ion-title>
+  </ion-toolbar>
+  <ion-button expand="block" class="btn-custom-color" (click)="pagar()">
+    <ion-icon slot="start" name="card-outline"></ion-icon>
+    Pagar ahora
+  </ion-button>
+</ion-footer>

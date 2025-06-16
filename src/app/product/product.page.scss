@@ -1,0 +1,14 @@
+.btn{
+    background-color: var(--ion-color-newPrimary-shade);
+    color:white;
+    padding: 5px 10px ;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.btn-custom-color {
+  --background: #437a69;
+  --background-activated: #376357; /* color cuando se presiona */
+  --color: #fff; /* color del texto */
+  --border-radius: 8px;
+}

@@ -12,6 +12,14 @@ export class AppComponent {
 
   public isWeb: boolean;
   public load: boolean;
+  
+  public appPages = [
+    { title: 'Home', url: '/home', icon: 'home' },
+    { title: 'customers', url: '/customers', icon: 'people' },
+    { title: 'Cities', url: '/cities', icon: 'people' },
+    { title: 'Orders', url: '/orders', icon: 'cart' },
+  ];
+  public labels = [];
 
   constructor(
     private platform: Platform,

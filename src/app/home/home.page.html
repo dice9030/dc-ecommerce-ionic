@@ -1,44 +1,35 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      CRUD SQLite
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="newPrimary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Lista de productos</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="clear"  (click)="goToOrders()">
+        <ion-icon name="cart-outline" slot="icon-only" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content [fullscreen]="true">
-  
-  <!-- Formulario para añadir un elemento -->
-  <ion-item>
-    <ion-input label="Lenguaje de programacion: " [(ngModel)]="language" name="language"></ion-input>
-    <ion-button (click)="create()">
-      <ion-icon name="add-outline"></ion-icon>
-    </ion-button>
-  </ion-item>
-
-  <!-- Lista de todos los elementos -->
-  <ion-list>
-    <ion-item-sliding *ngFor="let language of languages">
-
-      <!-- elemento -->
-      <ion-item>
-        <ion-label>{{language}}</ion-label>
-      </ion-item>
-
-      <!-- opciones -->
-      <ion-item-options>
-        <ion-item-option color="warning" (click)="update(language)">
-          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="danger" (click)="delete(language)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-      
-    </ion-item-sliding>
-
-
-  </ion-list>
-
-
+<ion-content >  
+   <ion-row>
+        <ion-col sizeLg="6" sizeMd="6" sizeXs="12" *ngFor="let product of searchedProducts">          
+            <ion-card >
+              <img src="{{product.image}}" />
+              <div >
+                <ion-row>
+                  <ion-col sizeLg="9" sizeMd="9" sizeXs="9">
+                      <div class="card-title">  {{product.title}} </div>
+                  </ion-col>
+                   <ion-col sizeLg="3" sizeMd="3" sizeXs="3" class="icon-col">
+                    <ion-icon name="eye-outline" [routerLink]="['/product',product.id]"></ion-icon>
+                    <ion-icon name="add-outline" (click)="create(product.title,product.price,product.image)" ></ion-icon>
+                  </ion-col>
+                </ion-row>                               
+              </div>
+            </ion-card>
+        </ion-col>
+    </ion-row>
 </ion-content>
