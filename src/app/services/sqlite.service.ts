@@ -80,29 +80,18 @@ export class SqliteService {
 
     // Obtenemos el fichero assets/db/db.json
     this.http.get('assets/db/db.json').subscribe(async (jsonExport: JsonSQLite) => {
-
-
       const jsonstring = JSON.stringify(jsonExport);
-      // Validamos el objeto
       const isValid = await CapacitorSQLite.isJsonValid({ jsonstring });
-
       // Si es valido
       if (isValid.result) {
-
         // Obtengo el nombre de la base de datos
         this.dbName = jsonExport.database;
-        // Lo importo a la base de datos
         await CapacitorSQLite.importFromJson({ jsonstring });
         // Creo y abro una conexion a sqlite
         await CapacitorSQLite.createConnection({ database: this.dbName });
         await CapacitorSQLite.open({ database: this.dbName })
-
-        // Marco que ya hemos descargado la base de datos
         await Preferences.set({ key: 'first_setup_key', value: '1' })
-        // Guardo el nombre de la base de datos
         await Preferences.set({ key: 'dbname', value: this.dbName })
-
-        // Indico que la base de datos esta lista
         this.dbReady.next(true);
 
       }

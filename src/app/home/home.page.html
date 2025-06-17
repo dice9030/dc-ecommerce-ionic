@@ -12,7 +12,14 @@
         </ion-button>
         <div class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</div>
       </div>
-     
+
+      <div class="cart-container" (click)="goToOrders()">
+        <ion-button fill="clear">
+          <ion-icon name="person-circle-outline"  size="large"></ion-icon>
+        </ion-button>        
+      </div>
+
+
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

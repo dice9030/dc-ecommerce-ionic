@@ -6,14 +6,14 @@
     <p>Por favor, ingresa tus datos</p>
 
     <ion-item lines="none">
-      <ion-input placeholder="Correo electrónico" type="email"></ion-input>
+      <ion-input placeholder="Correo electrónico" type="email" [(ngModel)]="email" ></ion-input>
     </ion-item>
 
     <ion-item lines="none">
-      <ion-input placeholder="Contraseña" type="password"></ion-input>
+      <ion-input placeholder="Contraseña" type="password" [(ngModel)]="password"></ion-input>
     </ion-item>
 
-    <ion-button expand="block" shape="round" size="large" class="login-btn">
+    <ion-button (click)="login()" expand="block" shape="round" size="large" class="login-btn" >
       Ingresar
     </ion-button>
   </div>

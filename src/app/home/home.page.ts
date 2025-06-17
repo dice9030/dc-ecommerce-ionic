@@ -29,7 +29,7 @@ export class HomePage {
 
 
   ionViewWillEnter(){
-    this.read();
+    setTimeout(() => { this.read();}, 1000);   
      this.getProducts().subscribe(res => {
       this.products = res;
       this.searchedProducts = this.products;

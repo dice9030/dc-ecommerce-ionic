@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { Device } from '@capacitor/device';
-import { Platform } from '@ionic/angular';
+import { MenuController, Platform } from '@ionic/angular';
 import { SqliteService } from './services/sqlite.service';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-root',
@@ -10,40 +13,54 @@ import { SqliteService } from './services/sqlite.service';
 })
 export class AppComponent {
 
+  public isLoggedIn = false;
   public isWeb: boolean;
   public load: boolean;
   
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
-    { title: 'customers', url: '/customers', icon: 'people' },
-    { title: 'Cities', url: '/cities', icon: 'people' },
     { title: 'Orders', url: '/orders', icon: 'cart' },
   ];
   public labels = [];
 
   constructor(
     private platform: Platform,
-    private sqlite: SqliteService) {
+    private sqlite: SqliteService,
+    private menu: MenuController, private router: Router) {
     this.isWeb = false;
     this.load = false;
     this.initApp();
+    this.checkLoginStatus(); 
   }
 
   initApp(){
 
     this.platform.ready().then( async () => {
-
-      // Comprobamos si estamos en web
       const info = await Device.getInfo();
       this.isWeb = info.platform == 'web';
-
-      // Iniciamos la base de datos
       this.sqlite.init();
-      // Esperamos a que la base de datos este lista
       this.sqlite.dbReady.subscribe(load => {
-        this.load = load;
+          this.load = load;
       })
     })
 
   }
+
+  async checkLoginStatus() {
+    const { value } = await Preferences.get({ key: 'tk' });
+    this.isLoggedIn = !!value; 
+  }
+
+  async logout() {
+    await Preferences.remove({ key: 'tk' });
+    localStorage.removeItem('token');
+    this.isLoggedIn = false;
+    this.router.navigate(['/login']);
+    this.menu.close();
+  }
+
+  navigateTo(route: string) {
+  this.router.navigate([route]);
+  this.menu.close();  // Cierra el menú
+}
 }
