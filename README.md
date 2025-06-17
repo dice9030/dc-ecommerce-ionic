@@ -72,3 +72,9 @@
    ```
 
 > Asegúrate de tener instalado [Node.js](https://nodejs.org/),
+
+
+  ```sh
+   user: usuario@correo.com pwd: 12345678
+   
+   ```
